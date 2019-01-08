@@ -1,31 +1,23 @@
-async function async1() {
-  console.log('async1 start')
-  await async2()
-  console.log('async1 end')
+Function.prototype.myCall = function(context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  context = context || window
+  context.fn = this
+  const args = [...arguments].slice(1)
+  const result = context.fn(...args)
+  delete context.fn
+  return result
 }
 
-async function async2() {
-  console.log('async2')
+function Product(name, price) {
+  this.name = name;
+  this.price = price;
 }
 
-// console.log('script start')
+function Food(name, price) {
+  Product.myCall(this, name, price);
+  this.category = 'food';
+}
 
-setTimeout(function () {
-  console.log('setTimeout')
-}, 0)
-
-async1();
-
-new Promise(function (resolve) {
-  console.log('promise1')
-  resolve();
-}).then(function () {
-  console.log('promise2')
-})
-
-// console.log('script end')
-
-'script start'
-'async1 start'
-'promise1'
-'script end'
+console.log(new Food('cheese', 5).name)

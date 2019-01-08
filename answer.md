@@ -87,7 +87,7 @@ setInterval(timer => {
 
 ## 8. 解释原型链
 
-在 javascript 中，一切皆对象，而每个对象都会有一个 `__proto__` 属性， `__proto__` 指向实例化该对象的构造函数，而该构造函数的 `__proto__` 又指向它的构造函数的 `__proto__` 如此向下，直到底层为 `null` 时停止，当调用一个对象的方法时，javascript 会顺着这条线寻找该方法。
+在 javascript 中，一切皆对象，而每个对象都会有一个 `__proto__` 属性， `__proto__` 指向实例化该对象的构造函数的 `prototype`，而该构造函数的 `__proto__` 又指向它的构造函数的 `__proto__` 如此往复向下，直到底层为 `null` 时停止，当调用一个对象的方法时，javascript 会顺着这条线寻找该方法。
 
 ## 9. 继承实现的方式
 
@@ -128,3 +128,90 @@ for (var i = 1; i <= 5; i++) {
 ## 15. javascript 中有哪些数据类型
 - 原始数据类型: number, boolean, string, null, undefinded, symbol
 - 引用数据类型: object
+
+## 16. 箭头函数中的 this 指向
+## 17. call，apply，bind 用法（如何改变 this 的指向）
+## 18. 实现 call，apply，bind 
+```js
+Function.prototype.myCall = function(context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  context = context || window
+  context.fn = this
+  const args = [...arguments].slice(1)
+  const result = context.fn(...args)
+  delete context.fn
+  return result
+}
+
+Function.prototype.myApply = function(context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  context = context || window
+  context.fn = this
+  let result
+  
+  if (arguments[1]) {
+    result = context.fn(...arguments[1])
+  } else {
+    result = context.fn()
+  }
+  delete context.fn
+  return result
+}
+
+Function.prototype.myBind = function (context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  const _this = this
+  const args = [...arguments].slice(1)
+  // 返回一个函数
+  return function F() {
+    if (this instanceof F) {
+      return new _this(...args, ...arguments)
+    }
+    return _this.apply(context, args.concat(...arguments))
+  }
+}
+```
+
+## 20. 使用 new 关键字后发生了什么
+
+1. 新生成了一个对象
+2. 链接到原型
+3. 绑定 this
+4. 返回新对象
+
+### 实现
+```js
+function create() {
+  let obj = {}
+  let Con = [].shift.call(arguments)
+  obj.__proto__ = Con.prototype
+  let result = Con.apply(obj, arguments)
+  return result instanceof Object ? result : obj
+}
+```
+
+## 21. intanceof 原理？
+
+`instanceof` 可以正确的判断对象的类型，因为内部机制是通过判断对象的原型链中是不是能找到类型的 `prototype`。
+
+```js
+function myInstanceof(left, right) {
+  let prototype = right.prototype
+  left = left.__proto__
+  while (true) {
+    if (left === null || left === undefined)
+      return false
+    if (prototype === left)
+      return true
+    left = left.__proto__
+  }
+}
+```
+
+## 22. 垃圾回收机制？
