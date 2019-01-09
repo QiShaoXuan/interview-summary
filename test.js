@@ -1,23 +1,13 @@
-Function.prototype.myCall = function(context) {
-  if (typeof this !== 'function') {
-    throw new TypeError('Error')
+function jsonp(url, jsonpCallback, success) {
+  let script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.type = 'text/javascript'
+  window[jsonpCallback] = function(data) {
+    success && success(data)
   }
-  context = context || window
-  context.fn = this
-  const args = [...arguments].slice(1)
-  const result = context.fn(...args)
-  delete context.fn
-  return result
+  document.body.appendChild(script)
 }
-
-function Product(name, price) {
-  this.name = name;
-  this.price = price;
-}
-
-function Food(name, price) {
-  Product.myCall(this, name, price);
-  this.category = 'food';
-}
-
-console.log(new Food('cheese', 5).name)
+jsonp('http://xxx', 'callback', function(value) {
+  console.log(value)
+})

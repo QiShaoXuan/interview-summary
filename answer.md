@@ -84,6 +84,7 @@ setInterval(timer => {
 ```
 
 ## 7. 函数节流与防抖
+[函数 & 防抖](https://qishaoxuan.github.io/blog/js/throttleDebounce.html)
 
 ## 8. 解释原型链
 
@@ -215,3 +216,74 @@ function myInstanceof(left, right) {
 ```
 
 ## 22. 垃圾回收机制？
+
+## 23. 解释冒泡，捕获事件
+## 24. 解释事件代理
+## 25. 什么是跨域？为什么浏览器要使用同源策略？你有几种方式可以解决跨域问题？了解预检请求嘛？
+
+### what 
+
+当协议、域名或者端口有一个不同即是跨域，浏览器会拦截 ajax 请求，目的是为了防止 CSRF 攻击。简单点说，CSRF 攻击是利用用户的登录态发起恶意请求。
+
+浏览器拦截的是读取内容的请求，所以通过表单等方式的请求是不会被拦截的
+
+### 解决
+1. JSONP
+
+- JSONP 的原理很简单，就是利用 <script> 标签没有跨域限制的漏洞。通过 <script> 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
+
+```js
+function jsonp(url, jsonpCallback, success) {
+  let script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.type = 'text/javascript'
+  window[jsonpCallback] = function(data) {
+    success && success(data)
+  }
+  document.body.appendChild(script)
+}
+jsonp('http://xxx', 'callback', function(value) {
+  console.log(value)
+})
+```
+
+2. CORS
+
+- 需要浏览器和后端同时支持。IE 8 和 9 需要通过 XDomainRequest 来实现。
+
+3. document.domain
+
+- 该方式只能用于二级域名相同的情况下，比如 a.test.com 和 b.test.com 适用于该方式。
+
+- 只需要给页面添加 document.domain = 'test.com' 表示二级域名都相同就可以实现跨域
+
+4. MessageChannel
+
+- [MessageChannel](https://qishaoxuan.github.io/blog/js/messageChannel.html)
+
+- 主要用于页面和其下的 iframe 之间的通讯
+
+## 26. 什么情况会造成阻塞渲染
+1. 在 HTML 和 CSS 生成渲染树的过程中肯定会造成阻塞渲染
+  - 解决方案：文件大小，并且扁平层级，优化选择器
+  
+2. 在浏览器解析到 script 标签时，会加载并执行 script 的内容，直到结束后才会继续渲染，也会造成渲染阻塞
+  - 解决方案：将 script 放在 body 底部，或者设置 `async` 属性为 `defer`
+  
+## 27. 重绘（Repaint）和回流（Reflow）
+
+重绘仅改变节点的外观，不影响布局，如改变节点的 color 属性
+
+回流指节点的大小或页面的布局发生改变
+
+回流必定会发生重绘，重绘不一定会引发回流
+
+### 如何减少
+
+1. 使用 transform 替代 top 
+2. 使用 visibility 替换 display: none ，因为前者只会引起重绘，后者会引发回流（改变了布局）
+3. 不要把节点的属性值放在一个循环里当成循环里的变量
+4. 不要使用 table 布局，可能很小的一个小改动会造成整个 table 的重新布局
+
+
