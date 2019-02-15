@@ -1,3 +1,7 @@
+[有答案的](https://github.com/QiShaoXuan/interview-summary/blob/master/answer.md)
+
+# javascript
+
 ## 1. 解释 `event loop`
 ## 2. 写出输出结果
 ```js
@@ -21,7 +25,7 @@ console.log('hi')
 let a = 0
 let b = async () => {
   a = a + await 10
-  console.log('2', a) 
+  console.log('2', a)
 }
 b()
 a++
@@ -49,7 +53,7 @@ for (var i = 1; i <= 5; i++) {
 ## 15. javascript 中有哪些数据类型
 ## 16. 箭头函数中的 this 指向
 ## 17. call，apply 用法（如何改变 this 的指向）
-## 18. 实现 call，apply，bind 
+## 18. 实现 call，apply，bind
 ## 20. 使用 new 关键字后发生了什么，通过 new 的方式创建对象和通过字面量创建有什么区别
 ## 21. intanceof 原理？
 ## 22. 垃圾回收机制？
@@ -62,3 +66,11 @@ for (var i = 1; i <= 5; i++) {
 
 ### 未写答案记录
 16，17，22，23，24
+
+
+# CSS
+
+1. what is BFC
+
+
+
