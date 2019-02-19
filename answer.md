@@ -373,3 +373,20 @@ jsonp('http://xxx', 'callback', function(value) {
 4. 尽可能压缩的js文件，减少资源下载的负担
 5. 尽可能避免在js中逐条操作dom样式，尽可能预定义好css样式，然后通过改变样式名来修改dom样式，这样集中式的操作能减少reflow或repaint的次数。
 6. 尽可能少的在js中创建dom，而是预先埋到HTML中用display:none来隐藏，在js中按需调用，减少js对dom的暴力操作。
+
+## 30. 强制缓存，跳过垃圾回收机制
+
+## 31. Vue 实例中的 data 为什么使用函数
+
+## 32. 实现 v-modal
+
+## 33. 前端性能优化
+
+## 34. 公司技术（组件）沉淀举例
+
+## 35. get 和 post 区别（从报文角度）
+
+## 36.  ES5 写 原型拓展（实现 extend）
+
+## 36. 虚拟 dom 相比 原生 dom 好处
+
