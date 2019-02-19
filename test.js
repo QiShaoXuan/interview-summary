@@ -11,3 +11,5 @@ function jsonp(url, jsonpCallback, success) {
 jsonp('http://xxx', 'callback', function(value) {
   console.log(value)
 })
+
+
