@@ -382,7 +382,7 @@ jsonp('http://xxx', 'callback', function(value) {
 
 ## 32. 实现 v-modal
 
-## 33. 前端性能优化
+## 33. --
 
 ## 34. 公司技术（组件）沉淀举例
 
@@ -398,6 +398,7 @@ function Animal() {
 
 
 function Cat() {
+  Animal.call(this)
   this.name = 'cat'
 }
 
@@ -422,6 +423,12 @@ class Apple extends Fruit{
 
 ## 36. 虚拟 dom 相比 原生 dom 好处
 
+先明确：虚拟 dom （框架封装的）不一定比 原生 dom 快 [参考](https://www.zhihu.com/question/31809713/answer/53544875)
+
+好处：
+
+简化dom操作，让数据与dom之间的关系更直观更简单
+
 ## 37. webpack 中 plugin 和 loader 有什么区别
 
 ### loader 
@@ -442,5 +449,7 @@ class Apple extends Fruit{
 ### 协商缓存
 
 如果缓存过期了，就需要发起请求验证资源是否有更新。协商缓存可以通过设置两种 HTTP Header 实现：Last-Modified 和 ETag 。
+
+## 39. 手写原生 ajax
 
 
