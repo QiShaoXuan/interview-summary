@@ -6,20 +6,31 @@
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Title</title>
 </head>
-<style>
-  .box{
-    width:100px;
-    height:100px;
-    background: red;
-    margin:15px;
-    float:left;
-  }
-  .box1{
-    background: green;
-    transform: translate(150px);
-  }
-</style>
 <body>
-<a href="http://g3.gigacre.xyz:10380/home/property/view/id/9457111" target="_blank">link</a>
+<section class="float">
+  <style>
+    .float .left {
+      float: left;
+      width: 300px;
+      background: green;
+    }
+    .float .center {
+      background: yellow;
+    }
+    .float .right {
+      width: 300px;
+      float: right;
+      background: red;
+    }
+    .wrapper{
+      height:100px;
+    }
+  </style>
+  <article class="left-center-right">
+    <div class="left wrapper"></div>
+    <div class="right wrapper"></div>
+    <div class="center wrapper"></div>
+  </article>
+</section>
 </body>
 </html>

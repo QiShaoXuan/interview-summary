@@ -88,7 +88,7 @@ setInterval(timer => {
 
 ## 8. 解释原型链
 
-在 javascript 中，一切皆对象，而每个对象都会有一个 `__proto__` 属性， `__proto__` 指向实例化该对象的构造函数的 `prototype`，而该构造函数的 `__proto__` 又指向它的构造函数的 `__proto__` 如此往复向下，直到底层为 `null` 时停止，当调用一个对象的方法时，javascript 会顺着这条线寻找该方法。
+在 javascript 中，一切皆对象，而每个对象都会有一个 `__proto__` 属性， `__proto__` 指向该对象的构造函数的 `prototype`，而该构造函数的 `__proto__` 又指向它的构造函数的 `__proto__` 如此往复向下，直到底层为 `null` 时停止，当调用一个对象的方法时，javascript 会顺着这条线寻找该方法。
 
 ## 9. 继承实现的方式
 
@@ -163,20 +163,23 @@ Function.prototype.myApply = function(context) {
   return result
 }
 
-Function.prototype.myBind = function (context) {
-  if (typeof this !== 'function') {
-    throw new TypeError('Error')
+Function.prototype.myBind = function(context, ...args) {
+  if (typeof this != 'function') {
+    throw TypeError('not a function');
   }
-  const _this = this
-  const args = [...arguments].slice(1)
-  // 返回一个函数
-  return function F() {
-    if (this instanceof F) {
-      return new _this(...args, ...arguments)
-    }
-    return _this.apply(context, args.concat(...arguments))
-  }
-}
+
+  const fn = this;
+
+  const resFn = function() {
+    return fn.call(this instanceof resFn ? this : context, ...args);
+  };
+
+  function F() {}
+  F.prototype = this.prototype;
+  resFn.prototype = new F();
+
+  return resFn;
+};
 ```
 
 ## 20. 使用 new 关键字后发生了什么
@@ -190,9 +193,9 @@ Function.prototype.myBind = function (context) {
 ```js
 function create() {
   let obj = {}
-  let Con = [].shift.call(arguments)
-  obj.__proto__ = Con.prototype
-  let result = Con.apply(obj, arguments)
+  let constructor = [].shift.call(arguments)
+  obj.__proto__ = constructor.prototype
+  let result = constructor.apply(obj, arguments)
   return result instanceof Object ? result : obj
 }
 ```
@@ -388,5 +391,37 @@ jsonp('http://xxx', 'callback', function(value) {
 
 ## 36.  ES5 写 原型拓展（实现 extend）
 
-## 36. 虚拟 dom 相比 原生 dom 好处
+## 36. 虚拟 dom 相比 原生 dom 好
+
+## 37. 实现代码
+
+```js
+const obj = {
+  A: 1,
+  "B.C": 3,
+  "B.A.A": 4,
+  "D.A": 5
+};
+// 实现函数将 obj 转化为 { A: 1, B: { C: 3, A: { A: 4 } }, D: { A: 5 } }
+
+```
+
+```js
+function flat(obj) {
+  let newObj = {};
+
+  for (let key in obj) {
+    const splitKey = key.split(".");
+    splitKey.reduce((accumulator, currentName, index) => {
+      if (!accumulator[currentName]) {
+        accumulator[currentName] = splitKey[index + 1] ? {} : obj[key];
+      }
+
+      return accumulator[currentName];
+    }, newObj);
+  }
+
+  return newObj;
+}
+```
 
