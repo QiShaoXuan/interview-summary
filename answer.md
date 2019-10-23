@@ -242,6 +242,8 @@ function myInstanceof(left, right) {
 
 浏览器拦截的是读取内容的请求，所以通过表单等方式的请求是不会被拦截的
 
+仅在同域名和同域名不同文件夹下两种情况时不存在跨域，其余皆为跨域
+
 ### 解决
 1. JSONP
 
@@ -383,13 +385,44 @@ jsonp('http://xxx', 'callback', function(value) {
 
 ## 32. 实现 v-modal
 
-## 33. 前端性能优化
+## 33. --
 
 ## 34. 公司技术（组件）沉淀举例
 
 ## 35. get 和 post 区别（从报文角度）
 
-## 36.  ES5 写 原型拓展（实现 extend）
+## 36. ES5 写原型拓展（实现 extends）
+```js
+// ES5
+function Animal() {
+  this.type = 'animal'
+  this.eat = function(){}
+}
+
+
+function Cat() {
+  Animal.call(this)
+  this.name = 'cat'
+}
+
+function inherits(Child, Parent) {
+  var F = function () {};
+  F.prototype = Parent.prototype;
+  Child.prototype = new F();
+  Child.prototype.constructor = Child;
+}
+
+// ES6
+class Fruit{
+  constructor(){}
+}
+
+class Apple extends Fruit{
+  constructor(){
+    super()
+  }
+}
+```
 
 ## 36. 虚拟 dom 相比 原生 dom 好
 
@@ -424,4 +457,34 @@ function flat(obj) {
   return newObj;
 }
 ```
+
+先明确：虚拟 dom （框架封装的）不一定比 原生 dom 快 [参考](https://www.zhihu.com/question/31809713/answer/53544875)
+
+好处：
+
+简化dom操作，让数据与dom之间的关系更直观更简单
+
+## 37. webpack 中 plugin 和 loader 有什么区别
+
+### loader 
+用于加载某些资源文件。 因为webpack 本身只能打包commonjs规范的js文件，对于其他资源例如 css，图片，或者其他的语法集，比如 jsx， coffee，是没有办法加载的。 这就需要对应的loader将资源转化，加载进来。从字面意思也能看出，loader是用于加载的，它作用于一个个文件上。
+
+### plugin
+用于扩展webpack的功能。它直接作用于 webpack，扩展了它的功能。当然loader也时变相的扩展了 webpack ，但是它只专注于转化文件（transform）这一个领域。而plugin的功能更加的丰富，而不仅局限于资源的加载。
+
+
+## 38. 浏览器缓存策略
+
+通常浏览器缓存策略分为两种：强缓存和协商缓存，并且缓存策略都是通过设置 HTTP Header 来实现的。
+
+### 强缓存
+
+强缓存可以通过设置两种 HTTP Header 实现：Expires 和 Cache-Control 。强缓存表示在缓存期间不需要请求，state code 为 200。
+
+### 协商缓存
+
+如果缓存过期了，就需要发起请求验证资源是否有更新。协商缓存可以通过设置两种 HTTP Header 实现：Last-Modified 和 ETag 。
+
+## 39. 手写原生 ajax
+
 
